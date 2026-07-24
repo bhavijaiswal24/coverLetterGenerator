@@ -6,6 +6,10 @@ const groq = new Groq({
 
 const generateCoverLetter = async (req, res) => {
   try {
+    console.log("===== NEW REQUEST =====");
+    console.log("GROQ_API_KEY exists:", !!process.env.GROQ_API_KEY);
+    console.log("Request Body:", req.body);
+
     const {
       name,
       address,
@@ -20,7 +24,6 @@ const generateCoverLetter = async (req, res) => {
       experience,
     } = req.body;
 
-    // Format date
     const formattedDate = date
       ? new Date(date).toLocaleDateString("en-US", {
           year: "numeric",
@@ -73,11 +76,7 @@ IMPORTANT RULES
 2. NEVER invent dates.
 3. NEVER replace company names.
 4. NEVER replace hiring manager names.
-5. NEVER use placeholders such as:
-   [Your Address]
-   [Date]
-   [Company Address]
-   [City]
+5. NEVER use placeholders.
 6. Use ONLY the supplied information.
 7. If any field is empty, simply omit it.
 8. Cover letter should be between 350 and 450 words.
@@ -86,7 +85,7 @@ IMPORTANT RULES
 11. Sound professional and confident.
 12. Return ONLY the cover letter.
 
-Format exactly like this:
+Format:
 
 ${name}
 ${address}
@@ -115,7 +114,7 @@ ${name}
         {
           role: "system",
           content:
-            "You are an expert HR recruiter. Always use only the user's supplied information. Never invent names, companies, addresses, dates, or placeholders.",
+            "You are an expert HR recruiter. Always use only the user's supplied information.",
         },
         {
           role: "user",
@@ -124,16 +123,31 @@ ${name}
       ],
     });
 
+    console.log("Groq API Success");
+
     return res.status(200).json({
       success: true,
       coverLetter: completion.choices[0].message.content,
     });
+
   } catch (error) {
-    console.error("Groq Error:", error);
+    console.error("========== GROQ ERROR ==========");
+    console.error("Message:", error.message);
+
+    if (error.status) {
+      console.error("Status:", error.status);
+    }
+
+    if (error.response) {
+      console.error("Response:", error.response.data);
+    }
+
+    console.error("Full Error:", error);
 
     return res.status(500).json({
       success: false,
       message: "Failed to generate cover letter.",
+      error: error.message,
     });
   }
 };

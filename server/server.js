@@ -13,17 +13,14 @@ app.use(cors({
     credentials: true
 }));
 
-// Handle preflight requests
-app.options("*", cors());
-
 // Middleware
 app.use(express.json());
 
 
 // Routes
-const coverLetterRoute = require("./routes/coverLetter");
+const aiRoutes = require("./routes/aiRoutes");
 
-app.use("/api", coverLetterRoute);
+app.use("/api", aiRoutes);
 
 
 // Test API

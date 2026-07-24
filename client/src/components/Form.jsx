@@ -1,6 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
 
+// Backend URL from Vercel Environment Variables
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Form = ({ setCoverLetter }) => {
   const [formData, setFormData] = useState({
     name: "",
@@ -50,7 +53,7 @@ const Form = ({ setCoverLetter }) => {
       setLoading(true);
 
       const response = await axios.post(
-        "http://localhost:5000/api/generate",
+        `${API_URL}/api/generate`,
         formData
       );
 
@@ -65,7 +68,6 @@ const Form = ({ setCoverLetter }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-
       <input
         type="text"
         name="name"
@@ -169,7 +171,6 @@ const Form = ({ setCoverLetter }) => {
       >
         Reset
       </button>
-
     </form>
   );
 };

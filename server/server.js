@@ -6,7 +6,6 @@ const cors = require("cors");
 const app = express();
 
 
-// CORS Configuration
 const corsOptions = {
     origin: "https://cover-letter-generator-inky.vercel.app",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -14,13 +13,12 @@ const corsOptions = {
     credentials: true
 };
 
+
+// Handle OPTIONS before routes
 app.use(cors(corsOptions));
-
-// Handle preflight requests
-app.options(/.*/, cors(corsOptions));
+app.options("/api/generate", cors(corsOptions));
 
 
-// Middleware
 app.use(express.json());
 
 
@@ -30,13 +28,11 @@ const aiRoutes = require("./routes/aiRoutes");
 app.use("/api", aiRoutes);
 
 
-// Test API
 app.get("/", (req, res) => {
     res.send("Cover Letter Generator Backend Running 🚀");
 });
 
 
-// Server Port
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

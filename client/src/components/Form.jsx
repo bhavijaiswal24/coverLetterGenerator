@@ -1,8 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 
-// Backend URL from Vercel Environment Variables
-const API_URL = import.meta.env.VITE_API_URL;
+// Backend URL
+const API_URL = "https://coverlettergenerator-pj0q.onrender.com";
 
 const Form = ({ setCoverLetter }) => {
   const [formData, setFormData] = useState({
